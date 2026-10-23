@@ -559,6 +559,9 @@ const Settings: React.FC = () => {
                                 variant="secondary"
                                 size="md"
                                 onClick={() => {
+                                    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                                        window.speechSynthesis.resume();
+                                    }
                                     if (testingVoiceAudio) {
                                         stopSpeech();
                                         setTestingVoiceAudio(false);

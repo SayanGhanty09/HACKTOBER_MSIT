@@ -34,6 +34,11 @@ export const SpeechButton: React.FC<SpeechButtonProps> = ({
   const handleClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
+    // Unlock speech synthesis in user gesture
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.resume();
+    }
+
     if (speaking) {
       stopSpeech();
       setSpeaking(false);

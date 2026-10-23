@@ -194,7 +194,7 @@ export async function speakText(
 
   // Helper for browser SpeechSynthesis fallback
   const fallbackToBrowserSpeech = (reason: string) => {
-    console.info(`[ElevenLabsTTS] Falling back to browser speech engine: ${reason}`);
+    console.warn(`[ElevenLabsTTS] Falling back to browser speech engine: ${reason}`);
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
       notifyState(false);
       options?.onError?.(reason);
@@ -203,6 +203,8 @@ export async function speakText(
 
     try {
       window.speechSynthesis.cancel();
+      window.speechSynthesis.resume();
+
       const u = new SpeechSynthesisUtterance(clean);
       u.rate = 1.0;
       u.pitch = 1.0;
@@ -210,24 +212,39 @@ export async function speakText(
 
       // Pick a good browser voice if available
       const voices = window.speechSynthesis.getVoices();
-      const preferred = voices.find(
-        (v) => (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha')) && v.lang.startsWith('en')
-      ) || voices.find((v) => v.lang.startsWith('en'));
-      if (preferred) u.voice = preferred;
+      if (voices && voices.length > 0) {
+        const preferred = voices.find(
+          (v) => (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Zira') || v.name.includes('David')) && v.lang.startsWith('en')
+        ) || voices.find((v) => v.lang.startsWith('en'));
+        if (preferred) u.voice = preferred;
+      }
 
+      u.onstart = () => {
+        notifyState(true);
+      };
       u.onend = () => {
         currentUtterance = null;
         notifyState(false);
         options?.onEnd?.();
       };
       u.onerror = (e) => {
+        console.warn('[SpeechSynthesis error]', e);
         currentUtterance = null;
         notifyState(false);
         options?.onError?.(e.error || 'Speech error');
       };
 
       currentUtterance = u;
-      window.speechSynthesis.speak(u);
+
+      // Delay speech slightly to let Chrome process the cancel() queue cleanly
+      setTimeout(() => {
+        try {
+          window.speechSynthesis.resume();
+          window.speechSynthesis.speak(u);
+        } catch (_) {
+          notifyState(false);
+        }
+      }, 50);
     } catch (err: unknown) {
       notifyState(false);
       options?.onError?.(err instanceof Error ? err.message : String(err));
@@ -296,36 +313,49 @@ export async function testElevenLabsKey(customKey?: string): Promise<ElevenLabsK
   if (!key) {
     return {
       valid: false,
-      message: 'No ElevenLabs API key provided. Browser speech synthesis will be used as fallback.',
+      message: 'No ElevenLabs API key provided. Web speech synthesis will be used as fallback.',
     };
   }
 
   try {
-    const res = await fetch('https://api.elevenlabs.io/v1/user', {
+    // Directly test the text-to-speech endpoint with a minimal payload
+    const res = await fetch('https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM', {
+      method: 'POST',
       headers: {
         'xi-api-key': key,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        text: 'Test',
+      }),
     });
 
     if (res.ok) {
-      const data = await res.json().catch(() => ({}));
-      const tier = data?.subscription?.tier || 'active';
       return {
         valid: true,
-        message: `ElevenLabs API key is active (${tier} tier). Neural voice synthesis enabled!`,
+        message: 'ElevenLabs Text-to-Speech permission is active and operational!',
       };
     }
 
     const err = await res.json().catch(() => ({}));
-    const detailMsg = err?.detail?.message || `HTTP ${res.status}`;
+    const detail = err?.detail;
+    const msg = typeof detail === 'object' ? (detail?.message || JSON.stringify(detail)) : (detail || `HTTP ${res.status}`);
+
+    if (String(msg).includes('missing the permission text_to_speech') || String(detail?.status) === 'missing_permissions') {
+      return {
+        valid: false,
+        message: "Key is missing the 'text_to_speech' permission. In ElevenLabs (elevenlabs.io -> Settings -> API Keys), edit this key and enable 'Text to Speech' (or create a full access key).",
+      };
+    }
+
     return {
       valid: false,
-      message: `ElevenLabs notice: ${detailMsg}. Web speech synthesis fallback will handle voice playback seamlessly.`,
+      message: `ElevenLabs notice: ${msg}. (Browser speech synthesis will play audio).`,
     };
   } catch (err: unknown) {
     return {
       valid: false,
-      message: `Connection error: ${err instanceof Error ? err.message : String(err)}. Web speech synthesis active.`,
+      message: `Connection error: ${err instanceof Error ? err.message : String(err)}. Web speech active.`,
     };
   }
 }
