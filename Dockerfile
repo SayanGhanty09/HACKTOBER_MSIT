@@ -1,0 +1,35 @@
+# Stage 1: Build the React 19 Vite Dashboard
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY dashboard/package*.json ./
+RUN npm ci
+
+COPY dashboard/ .
+
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_ANON_KEY
+ARG VITE_ML_BASE_URL
+ARG VITE_GEMINI_API_KEY
+ARG VITE_ELEVENLABS_API_KEY
+ARG VITE_OPENROUTER_API_KEY
+
+ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
+ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
+ENV VITE_ML_BASE_URL=$VITE_ML_BASE_URL
+ENV VITE_GEMINI_API_KEY=$VITE_GEMINI_API_KEY
+ENV VITE_ELEVENLABS_API_KEY=$VITE_ELEVENLABS_API_KEY
+ENV VITE_OPENROUTER_API_KEY=$VITE_OPENROUTER_API_KEY
+
+RUN npm run build
+
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY dashboard/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
