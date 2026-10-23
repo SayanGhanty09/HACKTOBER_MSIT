@@ -1,0 +1,13 @@
+# ML risk-prediction server (FastAPI).
+# Models were trained with scikit-learn 1.8.0, which requires Python >= 3.11.
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+joblib==1.6.0
+pandas==3.0.6
+numpy==2.4.6
+scikit-learn==1.8.0
+xgboost==3.2.0
+openpyxl==3.1.5
+
+# ECG training only (train_ecg.py); not needed to serve inference.
+# wfdb>=4.1.0

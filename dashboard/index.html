@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anebilin</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      window.onerror = function(msg, src, line, col, err) {
+        document.body.innerHTML = '<div style="font-family:monospace;padding:32px;background:#0f172a;color:#f8fafc;min-height:100vh">'
+          + '<h2 style="color:#f87171;margin-bottom:16px">JS Error (before React)</h2>'
+          + '<pre style="background:#1e293b;padding:16px;border-radius:8px;color:#fbbf24;white-space:pre-wrap">' + msg + '\n\nFile: ' + src + '\nLine: ' + line + ':' + col + '\n\n' + (err && err.stack ? err.stack : '') + '</pre>'
+          + '<button onclick="location.reload()" style="margin-top:16px;padding:10px 24px;background:#6366f1;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px">Reload</button>'
+          + '</div>';
+        return true;
+      };
+      window.addEventListener('unhandledrejection', function(e) {
+        window.onerror('Unhandled Promise: ' + e.reason, '', 0, 0, e.reason);
+      });
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

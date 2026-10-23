@@ -1,0 +1,344 @@
+/* ============================================================================
+   ANEBILIN — Design System
+   Aesthetic: clinical-editorial. Paper surfaces, ink type, hairline structure.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ---------- Surfaces & ink ---------- */
+  --paper:          #fafaf6;        /* warm off-white app background */
+  --paper-elev:     #f4f3ed;        /* slightly recessed strip / track */
+  --surface:        #ffffff;        /* card */
+  --surface-tint:   #faf9f5;        /* nested surface inside card */
+  --surface-sunken: #f0efe9;        /* input fields, scroll tracks */
+
+  --ink:            #0b0b0c;        /* primary text */
+  --ink-2:          #2a2a2e;        /* secondary text */
+  --ink-3:          #6a6a72;        /* tertiary text / labels */
+  --ink-4:          #a8a8af;        /* placeholder / disabled */
+
+  --hairline:       rgba(11, 11, 12, 0.09);
+  --hairline-strong:rgba(11, 11, 12, 0.16);
+
+  /* ---------- Accent (driven by Shell from accent picker) ---------- */
+  --accent:         #0d6e6e;        /* deep teal */
+  --accent-ink:     #ffffff;        /* readable text on accent */
+  --accent-soft:    rgba(13, 110, 110, 0.10);
+  --accent-soft-2:  rgba(13, 110, 110, 0.18);
+  --accent-glow:    rgba(13, 110, 110, 0.22);
+
+  /* Backwards-compat aliases — older code references these names. */
+  --bg-color:        var(--paper);
+  --surface-color:   var(--surface);
+  --surface-lighter: var(--surface-tint);
+  --primary-color:   var(--accent);
+  --primary-glow:    var(--accent-glow);
+  --secondary-color: var(--ink-2);
+  --text-primary:    var(--ink);
+  --text-secondary:  var(--ink-2);
+  --text-tertiary:   var(--ink-3);
+  --border-color:    var(--hairline);
+
+  /* ---------- Semantic ---------- */
+  --success:        #1f7a4d;
+  --warn:           #b46d11;
+  --error:          #b3261e;
+  --success-soft:   rgba(31, 122, 77, 0.10);
+  --warn-soft:      rgba(180, 109, 17, 0.10);
+  --error-soft:     rgba(179, 38, 30, 0.10);
+  --success-color:  var(--success);
+  --warning-color:  var(--warn);
+  --error-color:    var(--error);
+
+  /* ---------- Type ---------- */
+  --font-display:   'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-sans:      'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:      'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --text-xs:        12px;
+  --text-sm:        13px;
+  --text-base:      14.5px;
+  --text-md:        16px;
+  --text-lg:        19px;
+  --text-xl:        24px;
+  --text-2xl:       32px;
+  --text-3xl:       44px;
+  --text-4xl:       64px;
+
+  /* ---------- Spacing (8px scale + half-steps) ---------- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-7:  32px;
+  --sp-8:  40px;
+  --sp-9:  56px;
+  --sp-10: 72px;
+
+  /* ---------- Radius ---------- */
+  --r-1: 4px;
+  --r-2: 8px;
+  --r-3: 12px;
+  --r-4: 16px;
+  --r-pill: 999px;
+
+  /* ---------- Shadow ---------- */
+  --shadow-1: 0 1px 0 rgba(11, 11, 12, 0.04);
+  --shadow-2: 0 1px 2px rgba(11, 11, 12, 0.04), 0 0 0 1px var(--hairline);
+  --shadow-3: 0 10px 30px -12px rgba(11, 11, 12, 0.18), 0 0 0 1px var(--hairline);
+  --shadow-pop: 0 24px 60px -20px rgba(11, 11, 12, 0.22), 0 0 0 1px var(--hairline);
+
+  /* ---------- Motion ---------- */
+  --ease:           cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-emphatic: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-1: 120ms;
+  --t-2: 200ms;
+  --t-3: 320ms;
+
+  /* ---------- Layout ---------- */
+  --sidebar-width: 244px;
+  --topbar-height: 68px;
+  --content-max: 1640px;
+
+  color-scheme: light;
+  color: var(--ink);
+  background: var(--paper);
+
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { background: var(--paper); }
+html { scroll-behavior: smooth; }
+body  { min-height: 100vh; }
+#root { min-height: 100vh; background: transparent; }
+
+/* ---------- Type ---------- */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--ink);
+  letter-spacing: -0.012em;
+  font-weight: 600;
+}
+h1 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; line-height: 1.05; }
+h1 em { font-style: italic; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+::selection { background: var(--accent-soft-2); color: var(--ink); }
+
+/* Numeric / tabular figures across the app */
+.num, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+/* ---------- Focus ring ---------- */
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r-1);
+}
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline-offset: 3px;
+}
+
+/* ---------- Scrollbars (thin, themed, seamless) ---------- */
+* { scrollbar-width: thin; scrollbar-color: rgba(11, 11, 12, 0.20) transparent; }
+*::-webkit-scrollbar           { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track     { background: transparent; }
+*::-webkit-scrollbar-thumb     {
+  background: rgba(11, 11, 12, 0.16);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 999px;
+  transition: background-color var(--t-2) var(--ease);
+}
+*::-webkit-scrollbar-thumb:hover  { background: rgba(11, 11, 12, 0.32); background-clip: padding-box; border: 3px solid transparent; }
+*::-webkit-scrollbar-corner       { background: transparent; }
+*::-webkit-scrollbar-button       { display: none; }
+
+/* Hide-scroll helper preserved */
+.scroll-hide::-webkit-scrollbar { display: none; }
+.scroll-hide                    { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ---------- Form reset ---------- */
+input, select, textarea, button {
+  font: inherit;
+  color: inherit;
+}
+input, select, textarea {
+  background: var(--surface-sunken);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-2);
+  padding: 9px 12px;
+  width: 100%;
+  transition: border-color var(--t-2) var(--ease), background-color var(--t-2) var(--ease), box-shadow var(--t-2) var(--ease);
+}
+input::placeholder, textarea::placeholder { color: var(--ink-4); }
+input:hover, select:hover, textarea:hover { border-color: var(--hairline-strong); }
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+button { background: none; border: 0; cursor: pointer; }
+
+/* ---------- Utilities used across pages ---------- */
+
+/* Glass — flat paper surface; the old blur looked muddy */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-3);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Card hover lift — refined: hairline darken, no translate, no glow */
+.card-glow,
+.hover-lift-glow {
+  transition: border-color var(--t-2) var(--ease), box-shadow var(--t-2) var(--ease), background-color var(--t-2) var(--ease);
+}
+.card-glow:hover,
+.hover-lift-glow:hover {
+  border-color: var(--hairline-strong);
+  box-shadow: var(--shadow-2);
+}
+
+/* Border spin premium — used by Live/Console/Stats. Just a quiet ring. */
+.border-spin-premium {
+  position: relative;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  transition: box-shadow var(--t-2) var(--ease);
+}
+.border-spin-premium:hover { box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+
+/* Button shimmer — kept as compatibility class; now a refined accent button */
+.btn-shimmer {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+  border-radius: var(--r-2);
+  padding: 10px 16px;
+  font-weight: 500;
+  transition: background-color var(--t-2) var(--ease), box-shadow var(--t-2) var(--ease), transform var(--t-1) var(--ease);
+}
+.btn-shimmer:hover  { background: color-mix(in oklab, var(--accent) 88%, black); box-shadow: 0 6px 18px -8px var(--accent-glow); }
+.btn-shimmer:active { transform: translateY(0.5px); }
+.btn-shimmer:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+
+/* Heading style hook — quietly refined */
+.glowing-heading {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.018em;
+  line-height: 1.1;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  animation: none;
+  display: inline;
+}
+
+/* Status dot — single subtle pulse, no rainbow */
+.status-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  background-color: var(--success);
+  border-radius: 50%;
+  display: inline-block;
+}
+.status-dot::after {
+  content: '';
+  position: absolute; inset: -3px;
+  border-radius: 50%;
+  border: 1.5px solid var(--success);
+  animation: ping 2.6s cubic-bezier(0.2, 0, 0.2, 1) infinite;
+  opacity: 0.6;
+}
+@keyframes ping {
+  0%   { transform: scale(0.85); opacity: 0.55; }
+  80%  { transform: scale(2.0);  opacity: 0; }
+  100% { transform: scale(2.0);  opacity: 0; }
+}
+
+/* Spinner used by lucide Loader2 icons across pages */
+.animate-spin { animation: ui-spin 0.9s linear infinite; }
+@keyframes ui-spin { to { transform: rotate(360deg); } }
+
+/* Animated mesh background — neutralised, kept for class-name compat */
+.bg-mesh-animated { background: transparent; }
+
+/* Vital card edge glow — used by LiveRecording cards. Quiet hairline accent. */
+.vital-card-edge-glow {
+  position: relative;
+  overflow: hidden;
+}
+.vital-card-edge-glow::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-color, var(--accent));
+  opacity: 0.85;
+  z-index: 1;
+}
+
+/* Page transition — used in routes; subtle, no large translate */
+.page-transition { animation: page-in var(--t-3) var(--ease-emphatic); }
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Dashboard grid utility (kept, but tightened) */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-5);
+}
+
+/* ---------- Print / prescription ---------- */
+.prescription-only { display: none; }
+@media print {
+  body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
+  .no-print, button, .sidebar-spacer, .glass, .card-glow, .border-spin-premium { display: none !important; }
+  .prescription-only {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    padding: 2.54cm !important;
+    background: white !important;
+    color: black !important;
+  }
+  .page-transition, main, #root {
+    background: white !important;
+    margin: 0 !important; padding: 0 !important; width: 100% !important;
+    transform: none !important; animation: none !important;
+  }
+  .glowing-heading { color: black !important; -webkit-text-fill-color: black !important; font-size: 24pt !important; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
